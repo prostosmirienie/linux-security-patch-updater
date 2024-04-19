@@ -1,0 +1,14 @@
+# Ignore compiled binaries
+*.out
+*.o
+
+# Ignore temporary files
+*~
+
+# Ignore logs and other generated files
+*.log
+*.log.*
+*.swp
+
+# Ignore system-specific files
+/etc/os-release
