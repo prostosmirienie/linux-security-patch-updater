@@ -26,7 +26,20 @@ update_security_patches() {
     distro=$(get_distro)
     case "$distro" in
         debian|ubuntu)
-            apt update && apt upgrade --only-security -y
+            # Refresh the list of available packages
+            apt-get update
+            # Get the list of upgradable packages
+            upgradable=$(apt list --upgradable 2>/dev/null)
+            # Filter the list to include only security updates
+            security_updates=$(echo "$upgradable" | awk '/\[upgradable from:.*security\]/{print $1}')
+            echo "$security_updates"
+            # exit 0
+            # Update only security patches
+            if [ -n "$security_updates" ]; then
+                apt-get install $security_updates -y
+            else
+                echo "No security updates available."
+            fi
             ;;
         centos|rhel|fedora)
             yum check-update && yum update --security -y
